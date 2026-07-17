@@ -4,7 +4,7 @@
       "type": "hero",
       "settings": {
         "eyebrow": "Collection 05 / In Stock Now",
-        "heading": "Handle With Care",
+        "heading": "",
         "button_label": "Enter the Collection",
         "button_url": "/collections/all"
       }
