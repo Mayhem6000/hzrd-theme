@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ page_title }}{% unless page_title contains shop.name %} – {{ shop.name }}{% endunless %}</title>
+  {% if page_description %}<meta name="description" content="{{ page_description }}">{% endif %}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  {{ content_for_header }}
+</head>
+<body>
+
+  <div class="caution-rule"></div>
+
+  <header class="site-header">
+    <a href="{{ routes.root_url }}" class="site-header__logo">HZRD</a>
+    <nav class="site-nav">
+      <a href="{{ routes.all_products_collection_url }}">Shop</a>
+      <a href="/pages/showroom">Showroom</a>
+      <a href="/collections/archive">Archive</a>
+      <a href="/pages/contact">Contact</a>
+    </nav>
+    <div class="site-header__icons">
+      <a href="{{ routes.cart_url }}">Cart ({{ cart.item_count }})</a>
+    </div>
+  </header>
+
+  <main>
+    {{ content_for_layout }}
+  </main>
+
+  <footer class="site-footer">
+    <span>&copy; {{ 'now' | date: '%Y' }} HZRD</span>
+    <div>
+      <a href="/pages/shipping">Shipping</a> &nbsp; · &nbsp;
+      <a href="/pages/contact">Contact</a> &nbsp; · &nbsp;
+      <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </footer>
+
+</body>
+</html>
