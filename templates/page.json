@@ -1,6 +1,0 @@
-{
-  "sections": {
-    "main": { "type": "page-basic", "settings": {} }
-  },
-  "order": ["main"]
-}
