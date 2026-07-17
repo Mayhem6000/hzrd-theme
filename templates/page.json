@@ -9,7 +9,20 @@
  */
 {
   "sections": {
-    "main": { "type": "page-basic", "settings": {} }
+    "main": {
+      "type": "page-basic",
+      "settings": {
+        "heading": ""
+      }
+    },
+    "archive_gallery_kMTpqK": {
+      "type": "archive-gallery",
+      "name": "Archive gallery",
+      "settings": {}
+    }
   },
-  "order": ["main"]
+  "order": [
+    "main",
+    "archive_gallery_kMTpqK"
+  ]
 }
