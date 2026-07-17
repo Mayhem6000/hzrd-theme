@@ -1,0 +1,159 @@
+<div class="collection-intro">
+  <div class="collection-intro__eyebrow">{{ collection.products_count }} Units Catalogued</div>
+  <h1 class="collection-intro__title">{{ collection.title | default: 'Collection' }}</h1>
+  <div class="collection-intro__meta">
+    <span>{{ collection.products_count }} PRODUCTS</span>
+  </div>
+</div>
+
+<div class="control-bar">
+  <div class="control-bar__group">
+    <button class="ctrl-btn" id="hzrd-view-toggle">View</button>
+    <button class="ctrl-btn" id="hzrd-sort-toggle">Sort</button>
+    <button class="ctrl-btn" id="hzrd-refine-toggle">Refine</button>
+  </div>
+  <span class="control-bar__count" id="hzrd-count">{{ collection.products_count }} products</span>
+</div>
+
+<div class="panel" id="hzrd-sort-panel" hidden>
+  <button class="panel__option is-active" data-sort="featured">Featured</button>
+  <button class="panel__option" data-sort="price-asc">Price, low to high</button>
+  <button class="panel__option" data-sort="price-desc">Price, high to low</button>
+  <button class="panel__option" data-sort="title-asc">Alphabetically, A-Z</button>
+  <button class="panel__option" data-sort="title-desc">Alphabetically, Z-A</button>
+</div>
+
+<div class="panel" id="hzrd-refine-panel" hidden>
+  <div class="panel__group" id="hzrd-filters">
+    <button class="chip is-active" data-filter="all">All ({{ collection.products_count }})</button>
+    {%- assign seen_types = '' -%}
+    {%- for product in collection.products -%}
+      {%- unless seen_types contains product.type -%}
+        {%- assign type_count = 0 -%}
+        {%- for p2 in collection.products -%}
+          {%- if p2.type == product.type -%}{%- assign type_count = type_count | plus: 1 -%}{%- endif -%}
+        {%- endfor -%}
+        <button class="chip" data-filter="{{ product.type | handleize }}">{{ product.type }} ({{ type_count }})</button>
+        {%- assign seen_types = seen_types | append: product.type | append: ',' -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+  <button class="panel__clear" id="hzrd-refine-clear">Clear</button>
+</div>
+
+<div class="product-grid" id="hzrd-grid">
+  {% for product in collection.products %}
+    <div class="hz-grid-item" data-type="{{ product.type | handleize }}" data-price="{{ product.price }}" data-title="{{ product.title | handleize }}">
+      {% render 'product-card', product: product, forloop: forloop %}
+    </div>
+  {% endfor %}
+</div>
+
+{% if collection.products_count == 0 %}
+  <div class="empty-state">No products in this collection yet.</div>
+{% endif %}
+
+<script>
+  (function () {
+    var grid = document.getElementById('hzrd-grid');
+    var items = Array.prototype.slice.call(grid.querySelectorAll('.hz-grid-item'));
+    var countEl = document.getElementById('hzrd-count');
+
+    var viewBtn = document.getElementById('hzrd-view-toggle');
+    var sortBtn = document.getElementById('hzrd-sort-toggle');
+    var refineBtn = document.getElementById('hzrd-refine-toggle');
+    var sortPanel = document.getElementById('hzrd-sort-panel');
+    var refinePanel = document.getElementById('hzrd-refine-panel');
+    var filterBar = document.getElementById('hzrd-filters');
+    var clearBtn = document.getElementById('hzrd-refine-clear');
+
+    var activeFilter = 'all';
+    var compactView = false;
+
+    function closePanels() {
+      sortPanel.hidden = true;
+      refinePanel.hidden = true;
+      sortBtn.classList.remove('is-open');
+      refineBtn.classList.remove('is-open');
+    }
+
+    viewBtn.addEventListener('click', function () {
+      compactView = !compactView;
+      grid.classList.toggle('product-grid--compact', compactView);
+      viewBtn.classList.toggle('is-open', compactView);
+    });
+
+    sortBtn.addEventListener('click', function () {
+      var willOpen = sortPanel.hidden;
+      closePanels();
+      sortPanel.hidden = !willOpen;
+      sortBtn.classList.toggle('is-open', willOpen);
+    });
+
+    refineBtn.addEventListener('click', function () {
+      var willOpen = refinePanel.hidden;
+      closePanels();
+      refinePanel.hidden = !willOpen;
+      refineBtn.classList.toggle('is-open', willOpen);
+    });
+
+    function applyFilter() {
+      var visible = 0;
+      items.forEach(function (item) {
+        var match = activeFilter === 'all' || item.dataset.type === activeFilter;
+        item.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      countEl.textContent = visible + ' products';
+    }
+
+    filterBar.addEventListener('click', function (e) {
+      var chip = e.target.closest('.chip');
+      if (!chip) return;
+      filterBar.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('is-active'); });
+      chip.classList.add('is-active');
+      activeFilter = chip.dataset.filter;
+      applyFilter();
+    });
+
+    clearBtn.addEventListener('click', function () {
+      activeFilter = 'all';
+      filterBar.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('is-active'); });
+      filterBar.querySelector('[data-filter="all"]').classList.add('is-active');
+      applyFilter();
+    });
+
+    sortPanel.addEventListener('click', function (e) {
+      var opt = e.target.closest('.panel__option');
+      if (!opt) return;
+      sortPanel.querySelectorAll('.panel__option').forEach(function (o) { o.classList.remove('is-active'); });
+      opt.classList.add('is-active');
+
+      var sorted = items.slice().sort(function (a, b) {
+        switch (opt.dataset.sort) {
+          case 'price-asc': return a.dataset.price - b.dataset.price;
+          case 'price-desc': return b.dataset.price - a.dataset.price;
+          case 'title-asc': return a.dataset.title.localeCompare(b.dataset.title);
+          case 'title-desc': return b.dataset.title.localeCompare(a.dataset.title);
+          default: return 0;
+        }
+      });
+      sorted.forEach(function (item) { grid.appendChild(item); });
+      closePanels();
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.control-bar') && !e.target.closest('.panel')) closePanels();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Collection grid",
+  "settings": [],
+  "presets": [
+    { "name": "Collection grid" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,16 @@
+<div class="archive-gallery">
+  {% assign archive_images = "archive-01.webp,archive-02.png,archive-03.png,archive-04.png,archive-05.png" | split: "," %}
+  {% for file in archive_images %}
+    <div class="archive-gallery__item">
+      <img src="{{ file | asset_url }}" alt="Archive" loading="lazy">
+    </div>
+  {% endfor %}
+</div>
+
+{% schema %}
+{
+  "name": "Archive gallery",
+  "settings": [],
+  "presets": [{ "name": "Archive gallery" }]
+}
+{% endschema %}

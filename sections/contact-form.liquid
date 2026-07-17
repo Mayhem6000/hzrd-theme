@@ -1,0 +1,39 @@
+<div class="contact-block">
+  <div class="contact-block__label">Contact Us</div>
+
+  {% form 'contact', class: 'contact-form' %}
+    {% if form.posted_successfully? %}
+      <div class="contact-form__success">Message sent — we'll get back to you shortly.</div>
+    {% endif %}
+    {% if form.errors %}
+      <div class="contact-form__error">{{ form.errors | default_errors }}</div>
+    {% endif %}
+
+    <div class="contact-form__row">
+      <div class="contact-form__field">
+        <input type="text" name="contact[name]" id="ContactName" placeholder="Name" value="{{ form.name }}">
+      </div>
+      <div class="contact-form__field">
+        <input type="email" name="contact[email]" id="ContactEmail" placeholder="Email *" value="{{ form.email }}" required>
+      </div>
+    </div>
+
+    <div class="contact-form__field">
+      <input type="tel" name="contact[phone]" id="ContactPhone" placeholder="Phone number" value="{{ form.phone }}">
+    </div>
+
+    <div class="contact-form__field">
+      <textarea name="contact[body]" id="ContactBody" placeholder="Comment" rows="6">{{ form.body }}</textarea>
+    </div>
+
+    <button type="submit" class="contact-form__submit">Send</button>
+  {% endform %}
+</div>
+
+{% schema %}
+{
+  "name": "Contact form",
+  "settings": [],
+  "presets": [{ "name": "Contact form" }]
+}
+{% endschema %}

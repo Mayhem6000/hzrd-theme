@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "archive_gallery": {
+      "type": "archive-gallery",
+      "settings": {}
+    }
+  },
+  "order": ["archive_gallery"]
+}

@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Collection 05 / In Stock Now",
+        "heading": "",
+        "button_label": "Enter the Collection",
+        "button_url": "/collections/all"
+      }
+    }
+  },
+  "order": ["hero"]
+}

@@ -1,0 +1,31 @@
+<div class="pdp">
+  <div class="pdp__media">
+    {% if product.featured_image %}
+      <img src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.title | escape }}">
+    {% endif %}
+  </div>
+  <div class="pdp__info">
+    <h1 class="pdp__title">{{ product.title }}</h1>
+    <div class="pdp__price">{{ product.price | money }}</div>
+    <div class="pdp__desc">{{ product.description }}</div>
+
+    {% if product.variants.size > 1 %}
+      <div class="pdp__variants">
+        {% for variant in product.variants %}
+          <button class="chip">{{ variant.title }}</button>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% form 'product', product %}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <button type="submit" class="pdp__add" {% unless product.available %}disabled{% endunless %}>
+        {% if product.available %}Add to Cart{% else %}Sold Out{% endif %}
+      </button>
+    {% endform %}
+  </div>
+</div>
+
+{% schema %}
+{ "name": "Main product", "settings": [] }
+{% endschema %}
