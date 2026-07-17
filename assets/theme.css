@@ -4,6 +4,12 @@
    Monochrome: white background, black text/accents.
    ========================================================= */
 
+/* =========================================================
+   HZRD — theme.css
+   Design language: hazard placard / spec-sheet industrial.
+   Monochrome: white background, black text/accents.
+   ========================================================= */
+
 :root {
   --hzrd-white:      #ffffff;
   --hzrd-black:       #0a0a0a;
@@ -531,17 +537,22 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- contact form ---------- */
 .contact-block {
-  padding: 0 32px 80px;
+  padding: 56px 32px 80px;
   max-width: 780px;
   margin: 0 auto;
+  text-align: center;
 }
 .contact-block__label {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  text-transform: none;
+  letter-spacing: 0;
   color: var(--hzrd-black);
-  margin-bottom: 18px;
+  margin-bottom: 10px;
+}
+.contact-form {
+  text-align: left;
 }
 .contact-form__success {
   border: 1px solid var(--hzrd-black);
