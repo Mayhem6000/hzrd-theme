@@ -11,12 +11,14 @@
   "sections": {
     "main": {
       "type": "page-basic",
+      "name": "shipping",
       "settings": {
         "heading": ""
       }
     },
     "archive_gallery_kMTpqK": {
       "type": "archive-gallery",
+      "disabled": true,
       "name": "Archive gallery",
       "settings": {}
     }
