@@ -11,8 +11,11 @@
   "sections": {
     "archive_gallery": {
       "type": "archive-gallery",
+      "name": "archive",
       "settings": {}
     }
   },
-  "order": ["archive_gallery"]
+  "order": [
+    "archive_gallery"
+  ]
 }
